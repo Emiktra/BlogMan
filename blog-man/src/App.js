@@ -1,11 +1,15 @@
+import { AppRouter } from './App Router/AppRouter';
 import './App.css';
-import { Register } from './Components/Register';
+import { useState } from "react";
+import AuthContext from './Contexts/AuthContext'
 
 function App() {
+  const [user, setUser] = useState(null)
+
   return (
-    <div className="App">
-      <Register/>
-    </div>
+      <AuthContext.Provider value={{   user, setUser   }}><div className="App">
+        <AppRouter/>
+      </div></AuthContext.Provider>
   );
 }
 
