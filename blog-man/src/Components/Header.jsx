@@ -1,10 +1,10 @@
 import React, { useState, useContext } from 'react'
 import { useHistory } from "react-router-dom";
-import styled from 'styled-components'
 import CWLogo from "../Assets/cw.jpeg"
 import AuthContext from '../Contexts/AuthContext';
 import { MenuItem, Menu, } from '@material-ui/core';
 import { getAuth, signOut } from "firebase/auth";
+import styled from "styled-components"
 
 // Styles
 const NavBar = styled.div`
@@ -109,6 +109,7 @@ export const Header = () => {
     const handleSignOut = () => {
         const auth = getAuth();
         signOut(auth).then(() => {setUser(null)})
+        .then(()=>{history.push("/login")})
         .catch((error) => {
         // const errorCode = error.code;
         // const errorMessage = error.message;
