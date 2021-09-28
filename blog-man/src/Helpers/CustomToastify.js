@@ -1,7 +1,7 @@
 import {toast} from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 
-export default{
+const CustomToastify ={
   success: (msg)=>{
     toast.success(msg, {
       position: "top-right",
@@ -28,8 +28,8 @@ export default{
         toastId: msg,
         });
       },
-      success: (msg)=>{
-        toast.success(msg, {
+      error: (msg)=>{
+        toast.error(msg, {
           position: "top-right",
           autoClose: 2500,
           hideProgressBar: false,
@@ -53,4 +53,4 @@ export default{
           });
         },
     } 
-
+export default CustomToastify;

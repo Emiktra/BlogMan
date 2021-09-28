@@ -56,29 +56,28 @@ const SignInTitle = styled.h1`
 `
 
 export const SignIn = () => {
-  const { user, setUser, userValue,  setUserValue, setInfos } = useContext(AuthContext);
+  const context = useContext(AuthContext);
   const history = useHistory();
 
   const LoginInUsingGoogle = () => {
     const provider = new GoogleAuthProvider();
-    const auth = getAuth()
-    signInWithPopup(auth, provider)
+    signInWithPopup(getAuth(), provider)
       .then((result) => {
         // This gives you a Google Access Token. You can use it to access the Google API.
-        const credential = GoogleAuthProvider.credentialFromResult(result);
+        // const credential = GoogleAuthProvider.credentialFromResult(result);
         // const token = credential.accessToken;
-        setUser(result.user)
+        context.setUser(result.user)
         history.push("/")
-        setInfos()
+        context.setInfos()
         // toast.success('Signed in using Google');
       }).catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // The email of the user's account used.
-        const email = error.email;
+        // const errorCode = error.code;
+        // const errorMessage = error.message;
+        // // The email of the user's account used.
+        // const email = error.email;
 
-        // The AuthCredential type that was used.
-        const credential = GoogleAuthProvider.credentialFromError(error);
+        // // The AuthCredential type that was used.
+        // const credential = GoogleAuthProvider.credentialFromError(error);
       });
   }
 
@@ -86,13 +85,13 @@ export const SignIn = () => {
     initialValues: { email: "", password: "", },
     validationSchema: validationSchema,
     onSubmit: (initialValues) => {
-      let auth = getAuth()
-      signInWithEmailAndPassword(auth, initialValues.email, initialValues.password)
-      .then((userCredential) => { setUser(userCredential.user) })
-      .then(setInfos)
+      signInWithEmailAndPassword(getAuth(), initialValues.email, initialValues.password)
       .then(()=>{history.push("/")})
+      .then((userCredential) => {context.setUser(userCredential.user)})
+      .then(context.setInfos)
       .catch((error) => {
         if (error.code === "auth/user-not-found"){toast.error("User not found")}
+        if (error.code === "auth/wrong-password"){toast.error("Invalid Password")}
       });
     },
   });
@@ -100,7 +99,7 @@ export const SignIn = () => {
     <HomeStyle>
       <ToastContainer limit={1}/>
       <LogInContainer>
-        <div><img src={BlogLogo} style={{ userSelect: "none" }} /></div>
+        <div><img src={BlogLogo} style={{ userSelect: "none" }} alt='BlogLogo'/></div>
         <SignInTitle>Sign in</SignInTitle>
         <FormContainer onSubmit={formik.handleSubmit}>
           <TextField sx={{ marginTop: "20px", width: "400px" }} type="text"

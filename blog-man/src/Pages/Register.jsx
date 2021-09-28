@@ -8,6 +8,8 @@ import { Button, TextField } from '@material-ui/core';
 import BlogLogo from "../Assets/blok.png"
 import { useHistory } from 'react-router';
 import firebase from '../Helpers/firebase';
+import CustomToastify from '../Helpers/CustomToastify';
+import { ToastContainer } from 'react-toastify';
 
 // Styles
 const HomeStyle = styled.div`
@@ -63,21 +65,20 @@ const validationSchema = Yup.object({
 });
 
 export const Register = () => {
-  const { user, setUser, userValue,  setUserValue, setInfos } = useContext(AuthContext);
+  const context = useContext(AuthContext);
   const history = useHistory();
   const formik = useFormik({
     initialValues: { email: "", password: "", name: "", photoURL: "", },
     validationSchema: validationSchema,
     onSubmit: (initialValues) => {
-      let auth = getAuth()
-      createUserWithEmailAndPassword(auth, initialValues.email, initialValues.password)
-        .then((userCredential) => { setUser(userCredential.user) })
-        .then(()=>{updateProfile(auth.currentUser, { displayName: initialValues.name, photoURL: initialValues.photoURL})})
+      createUserWithEmailAndPassword(getAuth(), initialValues.email, initialValues.password)
+        .then((userCredential) => { context.setUser(userCredential.user) })
+        .then(()=>{updateProfile(getAuth().currentUser, { displayName: initialValues.name, photoURL: initialValues.photoURL})})
         .then(()=>{history.push("/")})
-        .then(setInfos)
+        .then(context.setInfos)
         .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
+          if (error.code === "auth/email-already-in-use") 
+            {CustomToastify.error("User already exists")}
 
         });
     },
@@ -85,15 +86,14 @@ export const Register = () => {
 
   const LoginInUsingGoogle = () => {
     const provider = new GoogleAuthProvider();
-    const auth = getAuth()
-    signInWithPopup(auth, provider)
+    signInWithPopup(getAuth(), provider)
       .then((result) => {
         // This gives you a Google Access Token. You can use it to access the Google API.
-        const credential = GoogleAuthProvider.credentialFromResult(result);
+        // const credential = GoogleAuthProvider.credentialFromResult(result);
         // const token = credential.accessToken;
-        setUser(result.user)
-        setInfos()
         history.push("/")
+        context.setUser(result.user)
+        context.setInfos()
       }).catch((error) => {
         // const errorCode = error.code;
         // const errorMessage = error.message;
@@ -106,8 +106,9 @@ export const Register = () => {
   
   return (
     <HomeStyle>
+      <ToastContainer/>
       <RegisterContainer>
-        <div><img src={BlogLogo} style={{ userSelect: "none" }} /></div>
+        <div><img src={BlogLogo} style={{ userSelect: "none" }} alt='BlogLogo'/></div>
         <RegisterTitle>Register</RegisterTitle>
         <FormContainer onSubmit={formik.handleSubmit}>
 

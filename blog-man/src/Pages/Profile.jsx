@@ -1,5 +1,4 @@
 import React, { useContext } from 'react'
-import { useHistory } from "react-router-dom";
 import AuthContext from '../Contexts/AuthContext';
 import styled from "styled-components"
 import firebase from '../Helpers/firebase';
@@ -69,19 +68,18 @@ const ProfilePic = styled.img`
 `
 
 export const Profile = () => {
-    const { user, setUser, userValue, setUserValue } = useContext(AuthContext);
-    let history = useHistory();
+    const context = useContext(AuthContext);
 
     const DeleteAccount = () => {
-        deleteUser(user)
-            .then(() => { setUser(null) })
-            .then(() => { setUserValue(null) })
+        deleteUser(context.user)
+            .then(() => { context.setUser(null) })
+            .then(() => { context.setUserValue(null) })
             .then(()=>{CustomToastify.success("Account deleted")})
             .catch(() => {CustomToastify.warn("Session expired. Relogin to delete account")});
     }
 
     const ResetPassword = () => {
-        sendPasswordResetEmail(getAuth(), user.email)
+        sendPasswordResetEmail(getAuth(), context.user.email)
             .then(() => {CustomToastify.success("Verification email sent")})
             .catch((error) => {
                 // const errorCode = error.code;
@@ -90,16 +88,16 @@ export const Profile = () => {
     }
 
     const displayDate = ()=>{
-        if(!userValue === null) {return userValue.date.toLocaleDateString()}
+        if(!context.userValue === null) {return context.userValue.date.toLocaleDateString()}
         else if(localStorage.getItem("creationDate"))
             {return localStorage.getItem("creationDate")}
         return "missing info";
     }
 
     const displayPhoto = ()=>{
-        try {return user.photoURL}
+        try {return context.user.photoURL}
         catch{
-            if(!userValue === null) {return userValue.photo}
+            if(!context.userValue === null) {return context.userValue.photo}
             else if(localStorage.getItem("photoURL")) 
             {return localStorage.getItem("photoURL")}
             return NoData
@@ -115,11 +113,11 @@ export const Profile = () => {
                 <List>
                     <ListContainer>
                         <ListElementsTitle>Email:</ListElementsTitle>
-                        <ListElements>{user ? user.email : null}</ListElements>
+                        <ListElements>{context.user ? context.user.email : null}</ListElements>
                     </ListContainer>
                     <ListContainer>
                         <ListElementsTitle>Name:</ListElementsTitle>
-                        <ListElements>{user ? user.displayName : null}</ListElements>
+                        <ListElements>{context.user ? context.user.displayName : null}</ListElements>
                     </ListContainer>
                     <ListContainer>
                         <ListElementsTitle>Account created in:</ListElementsTitle>
@@ -150,7 +148,7 @@ export const Profile = () => {
                 <List>
                     <ListContainer style={{ display: "flex", justifyContent: "space-between" }}>
                         <ListElementsTitle>Dark Mode:</ListElementsTitle>
-                        <Switch disabled/>
+                        <Switch onClick={()=>{context.setThemeDark(!context.themeDark)}}/>
                     </ListContainer>
                     <ListContainer style={{ display: "flex", justifyContent: "space-between" }}>
                         <ListElementsTitle>Reset Password:</ListElementsTitle>

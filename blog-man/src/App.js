@@ -9,7 +9,7 @@ import CustomToastify from './Helpers/CustomToastify';
 function App() {
   const [user, setUser] = useState(null);
   const [userValue, setUserValue] = useState(null);
-  // const [themeDark, setThemeDark] = useState(false)
+  const [themeDark, setThemeDark] = useState(true)
   //  TODO: dark theme choice
 
   const setInfos = ()=>{
@@ -34,7 +34,7 @@ function App() {
 
 
   return (
-      <AuthContext.Provider value={{   user, setUser, userValue,  setUserValue, setInfos }}><div className="App">
+      <AuthContext.Provider value={{   user, setUser, userValue, setUserValue, setInfos, themeDark, setThemeDark }}><div className="App">
         <AppRouter/>
       </div></AuthContext.Provider>
   );
