@@ -34,9 +34,9 @@ function App() {
 
 
   return (
-      <AuthContext.Provider value={{   user, setUser, userValue, setUserValue, setInfos, themeDark, setThemeDark }}><div className="App">
+      <AuthContext.Provider value={{   user, setUser, userValue, setUserValue, setInfos, themeDark, setThemeDark }}>
         <AppRouter/>
-      </div></AuthContext.Provider>
+      </AuthContext.Provider>
   );
 }
 

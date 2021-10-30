@@ -1,6 +1,8 @@
 import { CardActionArea } from '@material-ui/core';
-import React from 'react'
+import React, { useContext } from 'react'
+import AuthContext from '../Contexts/AuthContext';
 import styled from "styled-components"
+import { useHistory } from 'react-router';
 
 // Styles
 const CardContainer = styled.div`
@@ -53,6 +55,14 @@ const ContextDesc = styled.p`
 `
 
 const Cards = ({ card }) => {
+  const history = useHistory();
+  const context = useContext(AuthContext);
+
+  const ToDetails =()=>{
+    context.user? 
+    history.push("/details"):
+    history.push("/login")
+  }
 
   return (
     <CardContainer>
@@ -62,7 +72,7 @@ const Cards = ({ card }) => {
       </BlogPoster>
       <CardActionArea>
         <Image src={card.postPic} />
-        <MainContext>
+        <MainContext onClick={ToDetails}>
           <ContextTitle>{card.title}</ContextTitle>
           <ContextDesc>{card.description.substring(0, 100) + "..."}</ContextDesc>
         </MainContext>

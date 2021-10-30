@@ -24,12 +24,11 @@ const HomeLogoContainer = styled.a`
 const HomeLogo = styled.img`
         width: 50px;
         height: 50px;
-        padding: 0;
+        padding: 5px;
         transition: 200ms;
         cursor: pointer;
         &:hover{
             background-color: rgba(0,0,0,0.15);
-            padding: 5px;
             border-radius: 50px;
         }
     `
