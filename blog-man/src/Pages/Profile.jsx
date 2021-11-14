@@ -21,8 +21,7 @@ const BackgroundContainer = styled.div`
     `
 const ProfilePage = styled.div`
         background-color: #fff;
-        min-width: 500px;
-        width: 700px;
+        min-width: 700px;
         box-shadow: 1px 1px  5px 0 gray;
         border-radius: 10px;
         margin-top: 70px;
